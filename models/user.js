@@ -80,6 +80,26 @@ class User {
 
   static findById(userId) {
     const db = getDb();
+
+    return db
+        .collection('users')
+        .findOne({ _id: new ObjectId(userId) })
+        .then(user => {
+            if (!user) {
+                return null;
+            }
+
+            return new User(
+                user.name,
+                user.email,
+                user.cart || { items: [] },
+                user._id
+            );
+        });
+}
+
+ /*  static findById(userId) {
+    const db = getDb();
     return db
       .collection('users')
       .findOne({ _id: new ObjectId(userId) })
@@ -90,7 +110,7 @@ class User {
       .catch(err => {
         console.log(err);
       });
-  }
+  } */
 }
 
 module.exports = User;
